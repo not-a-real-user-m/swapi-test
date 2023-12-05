@@ -6,6 +6,8 @@ export const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const throttleTimeout = useRef<number>(0);
 
+  const searchValue = searchParams.get('search') || '';
+
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = e.target.value;
 
@@ -22,9 +24,10 @@ export const Search = () => {
   return (
     <Box display="flex" justifyContent="center" mb={5}>
       <TextField
+        key={searchValue}
         label="Search your hero"
         variant="standard"
-        defaultValue={searchParams.get('search') || ''}
+        defaultValue={searchValue}
         onChange={handleInputChange}
       />
     </Box>

@@ -3,7 +3,7 @@ import {SWApi} from '../../../../../api/swapi';
 import {ICharacter} from '../../../../../api/swapi/types';
 
 export const useCharacterForm = (character: ICharacter) => {
-  const throttleTimeout = useRef(0);
+  const throttleTimeouts = useRef<Record<string, number>>({});
 
   const [snackbarOpenState, setSnackbarOpenState] = useState(false);
 
@@ -18,8 +18,8 @@ export const useCharacterForm = (character: ICharacter) => {
   }, []);
 
   const changeField = useCallback((name: keyof ICharacter, value: ICharacter[keyof ICharacter]) => {
-    clearTimeout(throttleTimeout.current);
-    throttleTimeout.current = window.setTimeout(() => {
+    clearTimeout(throttleTimeouts.current[name]);
+    throttleTimeouts.current[name] = window.setTimeout(() => {
       SWApi.editCharacter(character._id, {
         [name]: value,
       });
@@ -44,7 +44,7 @@ export const useCharacterForm = (character: ICharacter) => {
   }, [changeField]);
 
   useEffect(() => () => {
-    clearTimeout(throttleTimeout.current);
+    Object.keys(throttleTimeouts.current).forEach(clearTimeout);
   })
 
   return {handleInputChange, handleMultilineInputChange, snackbarOpenState, closeSnackbar}

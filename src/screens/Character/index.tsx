@@ -1,4 +1,4 @@
-import {Link as NavigationLink, useLoaderData} from 'react-router-dom';
+import {Link as NavigationLink, useLoaderData, useLocation} from 'react-router-dom';
 import {Box, Link, Typography} from '@mui/material';
 import {ArrowBack} from '@mui/icons-material';
 import {ICharacter} from '../../api/swapi/types';
@@ -10,13 +10,14 @@ import {Error} from './components/Error';
 
 export default function CharacterScreen() {
   const {characterData} = useLoaderData() as {characterData: ICharacter};
+  const {state} = useLocation();
 
   return (
     <Layout>
       <Box display="flex" justifyContent="center">
         <Box maxWidth="md" flex={1}>
 
-          <Link to="/" component={NavigationLink} underline="none">
+          <Link to={`/${state?.search ? `?${state.search}` : ''}`} component={NavigationLink} underline="none">
             <Box display="flex" flexDirection="row" alignItems="center">
               <ArrowBack fontSize="small"/>
               <Box ml={1}>

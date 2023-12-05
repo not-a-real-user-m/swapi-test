@@ -40,7 +40,8 @@ export class SWApi {
 
   public static editCharacter(id: string, data: Partial<ICharacter>) {
     if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(SWApi.getCharacterLSKey(id), JSON.stringify(data));
+      const localData = jsonParse<Partial<ICharacter>>(localStorage.getItem(SWApi.getCharacterLSKey(id))) || {};
+      localStorage.setItem(SWApi.getCharacterLSKey(id), JSON.stringify({...localData, ...data}));
     }
   }
 
